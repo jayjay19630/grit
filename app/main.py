@@ -1,6 +1,7 @@
 import sys
 import os
 import zlib
+import hashlib
 
 
 def main():
@@ -30,7 +31,13 @@ def main():
             decompressed_bytes = zlib.decompress(compressed_bytes)
             content = decompressed_bytes.split(b"\0")[1].decode(encoding="utf-8")
         print(content, end="")
-
+    elif command == "hash-object" and sys.argv[2] == "-w":
+        file_name = sys.argv[3]
+        with open(file_name, "r") as f:
+            content = f.read()
+            object_hash = hashlib.sha1(f"blob {len(content)}\0 {content}").hexdigest()
+        with open(f"{object_hash[:2]}/{object_hash[2:]}", "wb") as f:
+            f.write(zlib.compress(content))
     else:
         raise RuntimeError(f"Unknown command #{command}")
 
