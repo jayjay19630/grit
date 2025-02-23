@@ -28,8 +28,8 @@ def main():
         with open(f".git/objects/{object_dirname}/{object_filename}", "rb") as f:
             compressed_bytes = f.read()
             decompressed_bytes = zlib.decompress(compressed_bytes)
-            content = decompressed_bytes.split(b"\x00")[1].decode("utf-8").rstrip("\n")
-        print(content)
+            content = decompressed_bytes.split(b"\0")[1].decode(encoding="utf-8")
+        print(content, end="")
 
     else:
         raise RuntimeError(f"Unknown command #{command}")
