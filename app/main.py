@@ -35,9 +35,13 @@ def main():
         file_name = sys.argv[3]
         with open(file_name, "r") as f:
             content = f.read()
-            object_hash = hashlib.sha1(f"blob {len(content)}\0 {content}").hexdigest()
-        with open(f"{object_hash[:2]}/{object_hash[2:]}", "wb") as f:
-            f.write(zlib.compress(content))
+            object_hash = hashlib.sha1(
+                (f"blob {len(content)}\x00{content}").encode(encoding="utf-8")
+            ).hexdigest()
+        os.makedirs(f".git/objects/{object_hash[:2]}", exist_ok=True)
+        with open(f".git/objects/{object_hash[:2]}/{object_hash[2:]}", "wb") as f:
+            f.write(zlib.compress(content.encode(encoding="utf-8")))
+        print(object_hash)
     else:
         raise RuntimeError(f"Unknown command #{command}")
 
