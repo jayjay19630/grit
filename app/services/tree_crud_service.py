@@ -1,10 +1,12 @@
 import sys
 import zlib
-import hashlib
 import os
+import hashlib
+
+from app.services.blob_crud_service import write_blob_object
 
 
-def read_tree_object():
+def read_tree_object() -> list[str]:
     try:
         param_index = sys.argv.index("--name-only")
         object_hash = sys.argv[param_index + 1]
@@ -14,7 +16,7 @@ def read_tree_object():
     object_dirname = object_hash[:2]
     object_filename = object_hash[2:]
 
-    with open(f".git/objects/{object_dirname}/{object_filename}", "rb") as f:
+    with open(f".grit/objects/{object_dirname}/{object_filename}", "rb") as f:
         compressed_bytes = f.read()
 
     decompressed_bytes = zlib.decompress(compressed_bytes)
@@ -45,13 +47,45 @@ def read_tree_object():
     entries.sort(key=lambda entry: entry[1])
 
     if "--name-only" in sys.argv:
-        for _, name, _ in entries:
-            print(name)
+        return [name for _, name, _ in entries]
     else:
+        content = []
         for mode, name, object_hash in entries:
             object_type = "tree" if mode == "40000" else "blob"
-            print(f"{mode} {object_type} {object_hash} {name}")
+            content.append(f"{mode} {object_type} {object_hash} {name}")
+        return content
 
 
-def write_tree_object():
-    pass
+def write_tree_object(directory: str, ignored_files: list[str]) -> str:
+    entries = []
+
+    for item in sorted(os.listdir(directory)):
+        if item in ignored_files:
+            continue
+
+        item_path = os.path.join(directory, item)
+        if os.path.isfile(item_path):
+            sha1 = write_blob_object(item_path)
+            mode = "100644"
+        elif os.path.isdir(item_path):
+            sha1 = write_tree_object(item_path, ignored_files)
+            mode = "040000"
+        else:
+            continue
+
+        entries.append(f"{mode} {item}\0".encode() + bytes.fromhex(sha1))
+
+    tree_content = b"".join(entries)
+    header = f"tree {len(tree_content)}\0".encode()
+    store = header + tree_content
+
+    sha1 = hashlib.sha1(store).hexdigest()
+    object_dir = os.path.join(".grit", "objects", sha1[:2])
+    object_path = os.path.join(object_dir, sha1[2:])
+
+    os.makedirs(object_dir, exist_ok=True)
+
+    with open(object_path, "wb") as f:
+        f.write(zlib.compress(store))
+
+    return sha1
