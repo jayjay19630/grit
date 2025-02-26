@@ -1,59 +1,39 @@
-[![progress-banner](https://backend.codecrafters.io/progress/git/53d53b21-000c-4973-9642-c324816fa0d8)](https://app.codecrafters.io/users/codecrafters-bot?r=2qF)
+Welcome to `Grit`, my own personal implementation of `Git` using Python. Implements
+reading and writing for blob and tree objects and the ability to commit them, similar
+to how `Git` implements them. Uses `SHA1` for hashing and `zlib` for compression.
 
-This is a starting point for Python solutions to the
-["Build Your Own Git" Challenge](https://codecrafters.io/challenges/git).
-
-In this challenge, you'll build a small Git implementation that's capable of
-initializing a repository, creating commits and cloning a public repository.
-Along the way we'll learn about the `.git` directory, Git objects (blobs,
-commits, trees etc.), Git's transfer protocols and more.
-
-**Note**: If you're viewing this repo on GitHub, head over to
-[codecrafters.io](https://codecrafters.io) to try the challenge.
-
-# Passing the first stage
-
-The entry point for your Git implementation is in `app/main.py`. Study and
-uncomment the relevant code, and push your changes to pass the first stage:
-
-```sh
-git commit -am "pass 1st stage" # any msg
-git push origin master
-```
-
-That's all!
-
-# Stage 2 & beyond
-
-Note: This section is for stages 2 and beyond.
-
-1. Ensure you have `python` installed locally
-1. Run `./your_program.sh` to run your Git implementation, which is implemented
-   in `app/main.py`.
-1. Commit your changes and run `git push origin master` to submit your solution
-   to CodeCrafters. Test output will be streamed to your terminal.
+**Note**: This is a very raw version of `Git`, and should not be used to handle real projects!
 
 # Testing locally
 
-The `your_program.sh` script is expected to operate on the `.git` folder inside
-the current working directory. If you're running this inside the root of this
-repository, you might end up accidentally damaging your repository's `.git`
-folder.
+The `grit_program.sh` script is expected to operate on the `.grit` folder inside
+the current working directory.
 
-We suggest executing `your_program.sh` in a different folder when testing
-locally. For example:
+To initialise a repository as a `Grit` repository, follow these steps
 
 ```sh
-mkdir -p /tmp/testing && cd /tmp/testing
-/path/to/your/repo/your_program.sh init
+mkdir your-repo && cd your-repo
+/path/to/grit-repo/grit_program.sh init
 ```
+
+# Optimising your setup
 
 To make this easier to type out, you could add a
 [shell alias](https://shapeshed.com/unix-alias/):
 
 ```sh
-alias mygit=/path/to/your/repo/your_program.sh
+alias grit=/path/to/grit-repo/grit_program.sh
 
-mkdir -p /tmp/testing && cd /tmp/testing
-mygit init
+mkdir your-repo && cd your-repo
+grit init
 ```
+
+# Available commands
+
+This assumes that you have made a shell alias for the repository.
+
+- `grit init`: Initializes a new Grit repository by creating necessary configuration files like `.gritignore` and a `.grit` directory to store internal data.
+- `grit cat-file -p <object_hash>`: Displays the content of an object (such as a blob, tree, or commit) stored in the Grit repository, identified by its unique `<object_hash>`. This is used to view the raw data associated with a specific object.
+- `grit hash-object -w <file_name>`: Computes the hash of a file and stores it in the repository. The `-w` flag indicates that the object should be written (or saved) to the `Grit` repository after hashing.
+- `grit ls-tree`: Lists the contents of a tree object in the repository. This command can show the files and directories within a commit or branch, typically showing a snapshot of the repository at a particular point in time.
+- `grit write-tree`: Creates a tree object from the current state of the working directory, which is a representation of the directory structure and files. This is typically used to record changes to the repository.
