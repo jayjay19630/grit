@@ -29,7 +29,7 @@ def main():
     elif command == "ls-tree":
         content = read_tree_object()
         for entry in content:
-            print(entry, end="")
+            print(entry)
 
     # Write tree object recursively
     elif command == "write-tree":

@@ -51,7 +51,7 @@ def read_tree_object() -> list[str]:
     else:
         content = []
         for mode, name, object_hash in entries:
-            object_type = "tree" if mode == "40000" else "blob"
+            object_type = "tree" if mode == "040000" else "blob"
             content.append(f"{mode} {object_type} {object_hash} {name}")
         return content
 
