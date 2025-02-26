@@ -5,6 +5,9 @@ import os
 
 
 def read_blob_object():
+    """
+    Function to read single blob object specified from its hash.
+    """
     try:
         param_index = sys.argv.index("-p")
     except ValueError:
@@ -34,6 +37,9 @@ def read_blob_object():
 
 
 def write_blob_object(file_name: str):
+    """
+    Write a single blob object using a file.
+    """
     if not os.path.exists(file_name):
         raise FileNotFoundError(f"File {file_name} does not exist")
 

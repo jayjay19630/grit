@@ -7,6 +7,9 @@ from app.services.blob_crud_service import write_blob_object
 
 
 def read_tree_object() -> list[str]:
+    """
+    Function for reading a tree object.
+    """
     try:
         param_index = sys.argv.index("--name-only")
         object_hash = sys.argv[param_index + 1]
@@ -57,6 +60,10 @@ def read_tree_object() -> list[str]:
 
 
 def write_tree_object(directory: str, ignored_files: list[str]) -> str:
+    """
+    Create a tree object for given directory.
+    Recursively creates tree objects for nested directories.
+    """
     entries = []
 
     for item in sorted(os.listdir(directory)):
