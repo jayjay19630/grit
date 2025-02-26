@@ -1,10 +1,12 @@
+# Grit Version Control System
+
 Welcome to `Grit`, my own personal implementation of `Git` using Python. Implements
 reading and writing for blob and tree objects and the ability to commit them, similar
 to how `Git` implements them. Uses `SHA1` for hashing and `zlib` for compression.
 
 **Note**: This is a very raw version of `Git`, and should not be used to handle real projects!
 
-# Testing locally
+## Testing locally
 
 The `grit_program.sh` script is expected to operate on the `.grit` folder inside
 the current working directory.
@@ -16,7 +18,7 @@ mkdir your-repo && cd your-repo
 /path/to/grit-repo/grit_program.sh init
 ```
 
-# Optimising your setup
+### Optimising your setup
 
 To make this easier to type out, you could add a
 [shell alias](https://shapeshed.com/unix-alias/):
@@ -28,7 +30,7 @@ mkdir your-repo && cd your-repo
 grit init
 ```
 
-# Available commands
+### Available commands
 
 This assumes that you have made a shell alias for the repository.
 
