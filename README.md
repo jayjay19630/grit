@@ -4,7 +4,7 @@ Welcome to `Grit`, my own personal implementation of `Git` using Python. Impleme
 reading and writing for blob and tree objects and the ability to commit them, similar
 to how `Git` implements them. Uses `SHA1` for hashing and `zlib` for compression.
 
-One of the unique parts about this system is its ability to autogenerate commits! I know its hard to summarise all your changes into one line, so just let AI do it.
+One of the unique parts about this system is its ability to autogenerate commits! I know its hard to summarise all your changes into one line, so just let AI do it. But just know that Grit is very grumpy and will write your commits with a specific brand voice...
 
 **Note**: This is a very raw version of `Git`, and should not be used to handle real projects!
 
