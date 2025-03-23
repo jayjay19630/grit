@@ -1,9 +1,18 @@
 import sys
 import os
 
+from app.services.commit_service import commit_tree
 from app.services.init_service import init
 from app.services.blob_crud_service import read_blob_object, write_blob_object
 from app.services.tree_crud_service import read_tree_object, write_tree_object
+
+
+def get_ignore_files():
+    ignored_files: list[str] = []
+    with open(".gritignore", "r") as f:
+        for line in f:
+            ignored_files.append(line)
+    return ignored_files
 
 
 def main():
@@ -33,11 +42,13 @@ def main():
 
     # Write tree object recursively
     elif command == "write-tree":
-        ignored_files: list[str] = []
-        with open(".gritignore", "r") as f:
-            for line in f:
-                ignored_files.append(line.strip())
+        ignored_files = get_ignore_files()
         tree_hash = write_tree_object(current_directory, ignored_files)
+        print(tree_hash, end="")
+
+    elif command == "commit-tree":
+        ignored_files = get_ignore_files()
+        tree_hash = commit_tree(ignored_files)
         print(tree_hash, end="")
 
     else:
