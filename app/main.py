@@ -47,9 +47,20 @@ def main():
         print(tree_hash, end="")
 
     elif command == "commit-tree":
-        ignored_files = get_ignore_files()
-        tree_hash = commit_tree(ignored_files)
-        print(tree_hash, end="")
+        # Get tree hash
+        tree_index = sys.argv[2] + 1
+        tree_hash = sys.argv[tree_index]
+
+        # Get commit message
+        message_index = sys.argv.index("-m") + 1
+        commit_message = sys.argv[message_index]
+
+        # Get parent commit hash
+        parent_index = sys.argv.index("-p") + 1
+        parent_hash = sys.argv[parent_index]
+
+        commit_hash = commit_tree(tree_hash, commit_message, parent_hash)
+        print(commit_hash, end="")
 
     else:
         raise RuntimeError(f"Unknown command #{command}")
