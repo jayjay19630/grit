@@ -4,16 +4,11 @@ import hashlib
 import os
 
 
-def read_blob_object():
+def read_blob_object(object_hash: str):
     """
     Function to read single blob object specified from its hash.
     """
-    try:
-        param_index = sys.argv.index("-p")
-    except ValueError:
-        raise RuntimeError("Please use the -p marker to denote object hash!")
 
-    object_hash = sys.argv[param_index + 1]
     object_dirname = object_hash[:2]
     object_filename = object_hash[2:]
     object_path = f".grit/objects/{object_dirname}/{object_filename}"
@@ -33,7 +28,7 @@ def read_blob_object():
         _, content = decompressed_bytes.split(b"\0", 1)
         return content.decode("utf-8")
     except ValueError:
-        raise RuntimeError(f"Malformed blob object: {decompressed_bytes}")
+        raise RuntimeError(f"Malformed blob object {object_hash}")
 
 
 def write_blob_object(file_name: str):

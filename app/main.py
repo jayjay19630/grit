@@ -26,12 +26,21 @@ def main():
 
     # Read blob object and print output of content
     elif command == "cat-file":
-        content = read_blob_object()
+        try:
+            param_index = sys.argv.index("-p")
+        except ValueError:
+            raise RuntimeError("Please use -p marker to denote object hash!")
+        object_hash = sys.argv[param_index + 1]
+        content = read_blob_object(object_hash)
         print(content, end="")
 
     # Write blob object to a file based on its hash
-    elif command == "hash-object" and sys.argv[2] == "-w":
-        file_name = sys.argv[3]
+    elif command == "hash-object":
+        try:
+            param_index = sys.argv.index("-w")
+        except ValueError:
+            raise RuntimeError("Please use -w marker to denote blob should be written!")
+        file_name = sys.argv[param_index + 1]
         blob_hash = write_blob_object(file_name)
         print(blob_hash, end="")
 
