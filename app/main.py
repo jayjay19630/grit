@@ -2,7 +2,7 @@ import sys
 import os
 
 from app.services import autogenerate_service
-from app.services.commit_service import commit_tree
+from app.services.commit_service import commit_tree, read_commit_tree
 from app.services.init_service import init
 from app.services.blob_crud_service import read_blob_object, write_blob_object
 from app.services.tree_crud_service import read_tree_object, write_tree_object
@@ -67,6 +67,10 @@ def main():
 
         commit_hash = commit_tree(tree_hash, commit_message, parent_hash)
         print(commit_hash, end="")
+
+    elif command == "cat-commit":
+        content = read_commit_tree()
+        print(content, end="")
 
     else:
         raise RuntimeError(f"Unknown command #{command}")
