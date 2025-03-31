@@ -1,6 +1,7 @@
 import sys
 import os
 
+from app.services import autogenerate_service
 from app.services.commit_service import commit_tree
 from app.services.init_service import init
 from app.services.blob_crud_service import read_blob_object, write_blob_object
@@ -51,13 +52,18 @@ def main():
         tree_index = sys.argv[2] + 1
         tree_hash = sys.argv[tree_index]
 
-        # Get commit message
-        message_index = sys.argv.index("-m") + 1
-        commit_message = sys.argv[message_index]
-
         # Get parent commit hash
-        parent_index = sys.argv.index("-p") + 1
-        parent_hash = sys.argv[parent_index]
+        parent_hash = None
+        if "-p" in sys.argv:
+            parent_index = sys.argv.index("-p") + 1
+            parent_hash = sys.argv[parent_index]
+
+        # Get commit message
+        if "--autogenerate" in sys.argv and parent_hash is not None:
+            commit_message = autogenerate_service(tree_hash, parent_hash)
+        else:
+            message_index = sys.argv.index("-m") + 1
+            commit_message = sys.argv[message_index]
 
         commit_hash = commit_tree(tree_hash, commit_message, parent_hash)
         print(commit_hash, end="")
