@@ -1,15 +1,13 @@
 import os
 import hashlib
 import zlib
-import sys
 
 
-def read_commit_tree():
+def read_commit(object_hash: str):
     """
     Function to read commit object.
     """
 
-    object_hash = sys.argv[2]
     object_dirname = object_hash[:2]
     object_filename = object_hash[2:]
     object_path = f"./grit/objects/{object_dirname}/{object_filename}"
@@ -26,7 +24,7 @@ def read_commit_tree():
         _, content = decompressed_bytes.split(b"\0", 1)
         return content.decode("utf-8")
     except ValueError:
-        raise RuntimeError(f"Malformed commit object: {decompressed_bytes}")
+        raise RuntimeError(f"Malformed commit object {object_hash}")
 
 
 def commit_tree(

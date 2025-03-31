@@ -1,4 +1,3 @@
-import sys
 import zlib
 import hashlib
 import os

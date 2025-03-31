@@ -4,18 +4,13 @@ import os
 import hashlib
 
 from app.services.blob_crud_service import write_blob_object
+from app.utils import get_ignore_files
 
 
-def read_tree_object() -> list[str]:
+def read_tree_object(object_hash: str) -> list[str]:
     """
     Function for reading a tree object.
     """
-    try:
-        param_index = sys.argv.index("--name-only")
-        object_hash = sys.argv[param_index + 1]
-    except ValueError:
-        # --name-only flag is missing
-        object_hash = sys.argv[sys.argv.index("ls-tree") + 1]
     object_dirname = object_hash[:2]
     object_filename = object_hash[2:]
 
@@ -59,12 +54,13 @@ def read_tree_object() -> list[str]:
         return content
 
 
-def write_tree_object(directory: str, ignored_files: list[str]) -> str:
+def write_tree_object(directory: str) -> str:
     """
     Create a tree object for given directory.
     Recursively creates tree objects for nested directories.
     """
     entries = []
+    ignored_files = get_ignore_files()
 
     for item in sorted(os.listdir(directory)):
         if item in ignored_files:
@@ -75,7 +71,7 @@ def write_tree_object(directory: str, ignored_files: list[str]) -> str:
             sha1 = write_blob_object(item_path)
             mode = "100644"
         elif os.path.isdir(item_path):
-            sha1 = write_tree_object(item_path, ignored_files)
+            sha1 = write_tree_object(item_path)
             mode = "040000"
         else:
             continue
