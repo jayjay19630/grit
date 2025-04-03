@@ -10,8 +10,9 @@ One of the unique parts about this system is its ability to autogenerate commits
 
 ## Testing locally
 
-The `grit_program.sh` script is expected to operate on the `.grit` folder inside
-the current working directory.
+The `grit_program.sh` script is expected to operate on the `.grit` folder inside the current working directory.
+
+To use the AI features in `Grit`, make sure to `cp .env.sample .env` in the repo directory and fill in your OpenAI API key.
 
 To initialise a repository as a `Grit` repository, follow these steps
 
